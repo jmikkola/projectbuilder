@@ -45,7 +45,6 @@ function init_py_project () {
 }
 
 function _initial_commit () {
-    pwd
     git add . && \
         git commit -m "Initial commit" && \
         git push
@@ -54,13 +53,39 @@ function _initial_commit () {
 function _init_virtualenv () {
     virtualenv -p "$1" env/ && \
         source env/bin/activate && \
-        pip install -r requirements.txt
+		python setup.py develop
+}
+
+function mypythonproj () {
+    mkproject "$1" && \
+        init_py_project "$1" && \
+        _initial_commit
 }
 
 function mkpy3proj () {
-    mkproject "$1" && \
-        init_py_project "$1" && \
-        _initial_commit && \
-        _init_virtualenv "python3" &&
+	mypythonproj "$1" && \
+        _init_virtualenv "python3" && \
         source env/bin/activate
+}
+
+function setup_hs_project () {
+	touch README.md
+
+	_git_ignore "*~"
+	_git_ignore "*#"
+	_git_ignore "*.hi"
+	_git_ignore "*.o"
+	_git_ignore "$1"
+
+	echo "$1: $1.hs" > Makefile
+	echo "\tghc --make *.hs" >> Makefile
+	echo "main = putStrLn \"Hello world\"" > "$1.hs"
+}
+
+function mkhsproject () {
+	mkproject "$1" && \
+		setup_hs_project "$1" && \
+		_initial_commit && \
+		make && \
+		./$1
 }
