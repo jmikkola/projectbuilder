@@ -28,6 +28,7 @@ function _init_readme () {
 
 function init_py_project () {
     _git_ignore "*.pyc"
+    _git_ignore "*.egg-info"
     _git_ignore "env"
     _git_ignore "build"
     _git_ignore "__pycache__"
