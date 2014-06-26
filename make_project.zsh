@@ -21,20 +21,26 @@ function _git_ignore () {
     echo $1 >> .gitignore
 }
 
+function _default_git_ignores () {
+   _git_ignore "*#"
+   _git_ignore "*~"
+   _git_ignore ".#*"
+   _git_ignore "tags"
+   _git_ignore "TAGS"
+}
+
 function _init_readme () {
    touch README.md
    echo "# $1" >> README.md
  }
 
 function init_py_project () {
+    _default_git_ignores
     _git_ignore "*.pyc"
     _git_ignore "*.egg-info"
     _git_ignore "env"
     _git_ignore "build"
     _git_ignore "__pycache__"
-    _git_ignore "*#"
-    _git_ignore "*~"
-    _git_ignore ".#*"
 
     touch requirements.txt
 
@@ -72,8 +78,7 @@ function mkpy3proj () {
 function setup_hs_project () {
 	touch README.md
 
-	_git_ignore "*~"
-	_git_ignore "*#"
+    _default_git_ignores
 	_git_ignore "*.hi"
 	_git_ignore "*.o"
 	_git_ignore "$1"
