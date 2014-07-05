@@ -81,6 +81,7 @@ function setup_hs_project () {
     _default_git_ignores
 	_git_ignore "*.hi"
 	_git_ignore "*.o"
+	_git_ignore ".cabal-sandbox"
 	_git_ignore "$1"
 
 	echo "$1: $1.hs" > Makefile
@@ -91,6 +92,7 @@ function setup_hs_project () {
 function mkhsproject () {
 	mkproject "$1" && \
 		setup_hs_project "$1" && \
+		cabal sandbox init && \
 		_initial_commit && \
 		make && \
 		./$1
