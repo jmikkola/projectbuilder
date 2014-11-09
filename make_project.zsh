@@ -105,11 +105,15 @@ function setup_rust_project () {
     _git_ignore "target"
 
     mkdir src
-    echo "fn main() {
+    cat > src/$1.rs <<EOF
+fn main() {
     println!("Hello, world!");
-}" > src/$1.rs
+}
+EOF
 
-    echo "[package]
+
+    cat > Cargo.toml <<EOF
+[package]
 
 name = "$1"
 version = "0.0.1"
@@ -118,7 +122,7 @@ authors = [ "Jeremy Mikkola <jeremy@jeremymikkola.com>" ]
 [[bin]]
 
 name = "$1"
-" > Cargo.toml
+EOF
 }
 
 function mkrustproject () {
