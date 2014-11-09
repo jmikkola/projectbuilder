@@ -97,3 +97,34 @@ function mkhsproject () {
 		make && \
 		./$1
 }
+
+function setup_rust_project () {
+    echo "# $1" >> README.md
+
+    _default_git_ignores
+    _git_ignore "target"
+
+    mkdir src
+    echo "fn main() {
+    println!("Hello, world!");
+}" > src/$1.rs
+
+    echo "[package]
+
+name = "$1"
+version = "0.0.1"
+authors = [ "Jeremy Mikkola <jeremy@jeremymikkola.com>" ]
+
+[[bin]]
+
+name = "$1"
+" > Cargo.toml
+}
+
+function mkrustproject () {
+    mkproject "$1" && \
+        setup_rust_project "$1" && \
+        cargo build && \
+        _initial_commit && \
+        ./target/$1
+}
